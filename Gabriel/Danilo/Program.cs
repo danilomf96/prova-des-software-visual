@@ -120,11 +120,11 @@ app.MapGet("/api/folha/listar", ([FromServices] AppDataContext ctx) =>
 });
 
 
-// Buscar
-app.MapGet("/api/folha/buscar/{id}/{mes}/{ano}", ([FromRoute] int id, [FromServices] AppDataContext ctx) =>
+// Buscar por CPF, Mês e Ano
+app.MapGet("/api/folha/buscar/{cpf}/{mes}/{ano}", ([FromRoute] string cpf, [FromRoute] int mes, [FromRoute] int ano, [FromServices] AppDataContext ctx) =>
 {
-
-    Folha? folha = ctx.Folhas.Find(id);
+    Folha? folha = ctx.Folhas.FirstOrDefault(f =>
+        f.Funcionario.Cpf.Equals(cpf) && f.Mes == mes && f.Ano == ano);
 
     if (folha is null)
     {
